@@ -1,52 +1,27 @@
-# typst_cv_template
-A simple template for Typst.
+# Typst Academic CV Template
+
+A compact academic CV with navy headings, horizontal rules, two-column entry headers, and reusable award and skills rows. All sample identities, affiliations, dates, and achievements are illustrative.
 
 ![Preview](assets/CV_en_template.png)
 
-## How to use
+[Download the compiled PDF](assets/CV_en_template.pdf)
 
-1. Copy the template(`CV_en_template.typ`) inside the `src` folder to your workspace.
+## Usage
 
-Import one of the template inside your document.
-```typst
-#import "cv_template_en.typ": *
-```
-2. Configure the contents.
-You can edit the contents below the `//// Preview ////` sign:
-```typst
-#show: doc => conf(
-  name: "Lainey Rin",
-  address: "No.114, Apple Road, Banan(Postcode: 12345)",
-  phone: "(+21) 123-4567-8900",
-  email: "how@areyou.com",
-  doc,
-)
+Open `src/CV_template_en.typ` in Typst and replace the sample content below `#show: conf`. Set your contact information in `conf` or pass it through `#show: doc => conf(name: "YOUR NAME", email: "you@example.com", blog: "example.com", doc)`.
+
+Compile locally:
+
+```sh
+typst compile src/CV_template_en.typ assets/CV_en_template.pdf
 ```
 
-3. Configure the styles.
-Function `cv_block` is defined to construct the main content:
-```typst
-#let cv_block(//CV Content style
-  name: none,
-  date: none,
-  entity: none,
-  description: none,
-  
-) = par({
-  heading(level: 2, name)
-  if entity != none {
-    ", "
-    text(fill: luma(20%),style: "italic", entity)
-  }
-  h(1fr)
-  text(style: "italic", date)
-  v(1pt)
-  text(fill: luma(12%),description)
-})
-```
-Function `cv_link` is defined to carry links in the CV:
-```typst
-#let cv_link(
-  url,
-) = link("https://" + url, text(fill: rgb(20%, 20%, 40%), url))
-```
+The template uses New Computer Modern and includes education, research interests, manuscripts, conference presentations, research experience, internships, awards, and skills. State publication status accurately.
+
+## Customization
+
+- `conf`: contact information, margins, font, spacing, and section headings. Supply `blog` without `https://`.
+- `cv_block`: positional title plus optional `date`, `entity`, `location`, and `description` fields. Descriptions can continue across pages.
+- `award_block`: positional title plus optional `entity` and `date` fields for compact rows.
+
+Add or remove sections to suit your experience.

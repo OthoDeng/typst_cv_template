@@ -1,176 +1,110 @@
-#let conf(
-  name: none,
-  address: none,
-  phone: none,
-  email: none,
-  blog: none,
-  doc
-) = {
-  set page(margin: (x: 40pt, y: 40pt))
-  set text(font: "New Computer Modern", size: 12pt)
-  set block(spacing: 8pt)
-
-  set document(
-    title: "CV",
-    author: name,
-  )
-
+#let conf(name: "ALEX MORGAN", email: "alex@example.com", blog: "example.com", doc) = {
+  set page(paper: "a4", margin: (x: 20pt, y: 16pt))
+  set text(font: "New Computer Modern", size: 11pt)
+  set par(leading: 0.65em, spacing: 1em)
+  set document(title: "Academic CV", author: name)
   show link: underline
-
-  set align(center)
-  par(text(size: 18pt, weight: "bold", name))
-  v(8pt)
-  par(address)
-  par(stack(
-    dir: ltr,
-    spacing: 4pt,
-    text(phone),
-    text("·"),
-    link("mailto:" + email)
-  ))
-  v(4pt)
-
-  set align(start)
-  set line(stroke: 0.38pt + luma(20%))
-  show heading.where(
-    level: 1
-  ): it => {
-    set text(size: 14pt, weight: "bold")
+  align(center)[
+    #text(size: 18pt, weight: "bold", name) \
+    #link("mailto:" + email, email) · #link("https://" + blog, blog)
+  ]
+  show heading.where(level: 1): it => {
     v(4pt)
-    align(left, smallcaps(it))
-    v(-10pt)
-    stack(
-      dir: ltr,
-      spacing: 4pt,
-      line(length: 100%),
-      line(length: 4pt),
-      line(length: 4pt),
-      line(length: 4pt),
-      line(length: 4pt),
-      line(length: 4pt),
-    )
-    v(4pt)
+    text(size: 12pt, weight: "bold", fill: navy, upper(it.body))
+    v(-9pt)
+    line(length: 100%, stroke: 0.38pt + navy)
+    v(3pt)
   }
-  show heading.where(//Heading style
-    level: 2
-  ): it => {
-    box(text(size: 12pt, weight: "semibold", it, rgb("#1A237E")))
-  }
-
   doc
 }
-#let cv_block(//CV Content style
-  name: none,
-  date: none,
-  entity: none,
-  description: none,
 
-) = par({
-  heading(level: 2, name)
-  if entity != none {
-    ", "
-    text(fill: luma(20%),style: "italic", entity)
-  }
-  h(1fr)
-  text(style: "italic", date)
-  v(1pt)
-  text(fill: luma(12%),description)
-})
+#let cv_block(name, date: [], entity: [], location: [], description: []) = {
+  block(breakable: false)[
+    #grid(columns: (1fr, auto), column-gutter: 8pt,
+      text(size: 10.5pt, weight: "semibold", fill: navy, name),
+      text(size: 10.5pt, style: "italic", date))
+    #grid(columns: (1fr, auto), column-gutter: 8pt,
+      text(size: 10.5pt, style: "italic", entity),
+      text(size: 10.5pt, style: "italic", location))
+  ]
+  text(size: 10pt, description)
+}
 
-#let cv_link(
-  url,
-) = link("https://" + url, text(fill: rgb(20%, 20%, 40%), url))
-
-//// Preview ////
-
-#show: doc => conf(
-  name: "Lainey Rin",
-  address: "No.114, Apple Road, Banan(Postcode: 12345)",
-  phone: "(+21) 123-4567-8900",
-  email: "how@areyou.com",
-  doc,
+#let award_block(name, entity: [], date: []) = grid(
+  columns: (auto, 1fr, auto), column-gutter: 6pt,
+  strong(name), entity, emph(date),
 )
+
+// 以下身份、机构和经历均为通用示例。
+#show: conf
+
 = Education
-
-#cv_block(
-  name: "Caliton University",
-  date: "Sep. 2023 ~ Jul. 2027",
-  entity: "Atlantic",
+#cv_block("Example University",
+  date: [City, Country], entity: [B.S. in Environmental Science],
+  location: [Sep 2022 – Jul 2026 (Expected)],
   description: [
-    - B.S with Honors in Fish Touching
-    - Ranking: 1/183 | GPA：4.00/4
-  ],
-)
+    - GPA: 3.60/4.00 | Class rank: 8/60
+    - Relevant coursework: Statistics, Remote Sensing, Environmental Modeling, Scientific Programming.
+  ])
 
+= Research Interests
+*Remote Sensing · Environmental Change · Numerical Modeling · Climate Risk*
 
+= Publications & Manuscripts
+[1] *Morgan, A.*, Taylor, J. _Satellite observations of regional environmental change._ Manuscript under review.
 
-= Project Experience/ Internship
-#cv_block(
-  name: "Research Assistant",
-  entity: [Key Laboratory of Fishing],
+[2] Taylor, J., *Morgan, A.* _Evaluating environmental prediction methods._ Manuscript in preparation.
+
+= Conference Presentations
+*Morgan, A.*, Taylor, J. (2025). _Satellite observations of environmental change._ Example Research Conference, City, Country. Poster presentation.
+
+= Research Experience
+#cv_block("Satellite-Based Environmental Monitoring",
+  date: [Sep 2024 – Present],
+  entity: [Research assistant | Advisor: Prof. Jordan Taylor],
+  location: [Example University],
   description: [
-    - Assist with data collection and analysis for fish research project]
-  )
+    - Processed satellite observations and reanalysis data to characterize regional environmental variability.
+    - Implemented an event identification workflow in Python and evaluated sensitivity to analysis thresholds.
+    - Prepared research figures and contributed to manuscript drafting.
+    - #lorem(65)
+    - #lorem(50)
+  ])
 
-#v(5pt)
-#cv_block(
-  name: "Member",
-  entity: [
-     Innovation Center on Fish Touching
-  ],
-  description:[
-    - Contributed to development of fish catching model using machine learning
-  ]
-)
-
-
-
-= Area of Interest
-*Fish Touching* | *Cat Feeding* | *Dog jogging*
-
-= Publications
-
-#cv_block(
-  name: "Rei,*Rin, et al.",
-  entity: [Empirical Study of Paper Style Text Generation Technology Based on Large-scale Language Models [#cv_link("openai.com/114.514")]],
+#cv_block("Coastal Change Research Internship",
+  date: [Jun 2025 – Aug 2025],
+  entity: [Research intern | Advisor: Prof. Casey Lee],
+  location: [Example Research Institute],
   description: [
-    - Examined how Current students use Large-scale Language Module(ChatGPT) to cheat.
+    - Organized shoreline observations and prepared QGIS maps for regional coastal analysis.
+    - Compared shoreline change across coastal settings and contributed to a research report.
+    - #lorem(65)
+    - #lorem(50)
+  ])
 
-  ]
-)
-
-= Selected Awards and Honors
-#cv_block(
-  name: "Fish Catching Assessment Project",
-  entity: "Supervised by Professor Miku",
+#cv_block("Regional Environmental Modeling",
+  date: [Jan 2024 – Jun 2024], entity: [Course research project],
   description: [
-    - Analyzed 30 years of fish data to assess risk factors .
-    - Developed an interactive data visualization dashboard using Python.
-  ]
-)
+    - Configured numerical experiments on Linux and compared simulations with observations.
+    - Evaluated model performance using correlation and root mean square error.
+    - #lorem(65)
+    - #lorem(50)
+  ])
+
+= Internship
+#cv_block("Example Environmental Agency", date: [Jul 2024 – Aug 2024],
+  entity: [Intern | Monitoring Division], location: [City, Country],
+  description: [
+    - Supported environmental monitoring and preparation of technical summaries.
+    - Participated in field instrument calibration and data quality checks.
+    - #lorem(60)
+  ])
+
+= Selected Awards & Honors
+#award_block("Undergraduate Research Award", entity: [Example University], date: [2025])
+#award_block("Academic Scholarship", entity: [Example University], date: [2024])
 
 = Additional Information
-#cv_block(
-  name:"Extracurricular Activities",
-  entity: [
-    - Member, University Fish Association
-    - Volunteer, Local Fish Service Office
-    - User, #link("https://openai,com")[Open Ai]
-  ]
-)
-#cv_block(
-  name: "Laboratory Skills",
-  description:[
-    - Maintenance and operation of the clean laboratory
-    - Pipetting, weighing, filtrating, titrating, etc.
-  ]
-)
-
-#cv_block(
-  name: "Computer and Language Skills",
-  description: [
-    - Programming: Python(Average)
-    - Software: Meh
-    - Language: Alienese(Native)
-]
-)
+#award_block("Programming", entity: [Python, Shell, Fortran, Typst/LaTeX])
+#award_block("Scientific Computing", entity: [Linux/HPC, Git, MATLAB, QGIS])
+#award_block("Languages", entity: [Language A (native), English (proficient)])
